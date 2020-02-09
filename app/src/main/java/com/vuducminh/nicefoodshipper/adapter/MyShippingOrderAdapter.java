@@ -1,6 +1,7 @@
 package com.vuducminh.nicefoodshipper.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 import com.vuducminh.nicefoodshipper.R;
+import com.vuducminh.nicefoodshipper.ShippingActivity;
 import com.vuducminh.nicefoodshipper.common.Common;
+import com.vuducminh.nicefoodshipper.common.CommonAgr;
 import com.vuducminh.nicefoodshipper.model.OrderModel;
 import com.vuducminh.nicefoodshipper.model.ShippingOrderModel;
 
@@ -24,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.paperdb.Paper;
 
 public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrderAdapter.MyViewHolder>{
 
@@ -35,6 +40,7 @@ public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrder
         this.context = context;
         this.shippingOrderModelList = shippingOrderModelList;
         simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Paper.init(context);
     }
 
     @NonNull
@@ -64,6 +70,12 @@ public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrder
         if(shippingOrderModelList.get(position).isStartTrip()) {
             holder.btn_ship_now.setEnabled(false);
         }
+
+        holder.btn_ship_now.setOnClickListener(v -> {
+
+            Paper.book().write(CommonAgr.SHIPPING_ORDER_DATA,new Gson().toJson(shippingOrderModelList.get(position)));
+            context.startActivity(new Intent(context, ShippingActivity.class));
+        });
 
     }
 
