@@ -51,6 +51,7 @@ public class HomeViewModel extends ViewModel implements IShippingOrderCallbackLi
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot orderSnapshot: dataSnapshot.getChildren()) {
                     ShippingOrderModel shippingOrderModel = orderSnapshot.getValue(ShippingOrderModel.class);
+                    shippingOrderModel.setKey(orderSnapshot.getKey());
                     tempList.add(shippingOrderModel);
                 }
 

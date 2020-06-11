@@ -10,6 +10,8 @@ public class CommonAgr {
     public static final String NOTI_CONTENT = "content";
     public static final String TOKEN_REF = "Tokens";
     public static final String SHIPPING_ORDER_REF = "ShippingOrderModel";
-    public static final String URL_FCM = "https://fom.googleapis.com/";
+    public static final String URL_FCM = "https://fcm.googleapis.com/";
     public static final String SHIPPING_ORDER_DATA = "ShippingData";
+    public static final String URL_MAP_GOOGLE = "https://maps.googleapis.com/";
+    public static final String TRIP_START = "Trip";
 }
