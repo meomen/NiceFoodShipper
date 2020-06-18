@@ -129,7 +129,39 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         String data = Paper.book().read(CommonAgr.SHIPPING_ORDER_DATA);
         Paper.book().write(CommonAgr.TRIP_START, data);
         btn_start_trip.setEnabled(false);
-        drawRoutes(data);
+
+        //Update
+        fusedLocationProviderClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        Map<String,Object> update_data = new HashMap<>();
+                        update_data.put("currentLat",location.getLatitude());
+                        update_data.put("currentLng",location.getLongitude());
+                        FirebaseDatabase.getInstance()
+                                .getReference(CommonAgr.SHIPPING_ORDER_REF)
+                                .child(shippingOrderModel.getKey())
+                                .updateChildren(update_data)
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(ShippingActivity.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        drawRoutes(data);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ShippingActivity.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @OnClick(R.id.btn_show)
@@ -495,7 +527,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         update_data.put("currentLng", lastLocation.getLongitude());
 
         String data = Paper.book().read(CommonAgr.TRIP_START);
-        if (TextUtils.isEmpty(data)) {
+        if (!TextUtils.isEmpty(data)) {
             ShippingOrderModel shippingOrderModel = new Gson()
                     .fromJson(data, new TypeToken<ShippingOrderModel>() {
                     }.getType());
@@ -508,9 +540,10 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
                         .addOnFailureListener(e -> {
                             Toast.makeText(ShippingActivity.this, "Minh dep trai 5" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
-            } else {
-                Toast.makeText(this, "please press START TRIP", Toast.LENGTH_SHORT).show();
             }
+        }
+        else {
+            Toast.makeText(this, "please press START TRIP", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -599,7 +632,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
                                         marker.setAnchor(0.5f, 0.5f);
                                         marker.setRotation(Common.getBearing(start, newPosition));
 
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
                                     }
                                 });
 

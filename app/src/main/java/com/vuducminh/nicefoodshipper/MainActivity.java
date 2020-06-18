@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         init();
 
-        //Delete data offline;
+//        //Delete data offline;
 //        Paper.init(this);
 //        Paper.book().delete(CommonAgr.TRIP_START);
 //        Paper.book().delete(CommonAgr.SHIPPING_ORDER_DATA);
