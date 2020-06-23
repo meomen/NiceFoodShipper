@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vuducminh.nicefoodshipper">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
 
     <application
         android:allowBackup="true"
@@ -14,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".RestaurantListActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -22,7 +21,7 @@
 
         <activity
             android:name=".ShippingActivity"
-            android:label="@string/title_activity_shipping"></activity>
+            android:label="@string/title_activity_shipping" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"

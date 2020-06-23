@@ -1,5 +1,7 @@
 package com.vuducminh.nicefoodshipper.ui.home;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -33,7 +35,9 @@ public class HomeViewModel extends ViewModel implements IShippingOrderCallbackLi
     }
 
     public MutableLiveData<List<ShippingOrderModel>> getMutableLiveDataShippingOrder(String shipperPhone) {
-        loadOrderByShipper(shipperPhone);
+
+        if(shipperPhone != null && !TextUtils.isEmpty(shipperPhone))
+            loadOrderByShipper(shipperPhone);
         return mutableLiveDataShippingOrder;
     }
 
@@ -43,7 +47,9 @@ public class HomeViewModel extends ViewModel implements IShippingOrderCallbackLi
 
     private void loadOrderByShipper(String shipperPhone) {
         List<ShippingOrderModel> tempList = new ArrayList<>();
-        Query orderRef = FirebaseDatabase.getInstance().getReference(CommonAgr.SHIPPING_ORDER_REF)
+        Query orderRef = FirebaseDatabase.getInstance().getReference(CommonAgr.RESTAURANT_REF)
+                .child(Common.currentRestaurant.getUid())
+                .child(CommonAgr.SHIPPING_ORDER_REF)
                 .orderByChild("shipperPhone")
                 .equalTo(Common.currentShipperUser.getPhone());
         orderRef.addListenerForSingleValueEvent(new ValueEventListener() {

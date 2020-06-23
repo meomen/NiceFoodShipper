@@ -24,6 +24,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.vuducminh.nicefoodshipper.R;
+import com.vuducminh.nicefoodshipper.model.RestaurantModel;
 import com.vuducminh.nicefoodshipper.model.ShipperUserModel;
 import com.vuducminh.nicefoodshipper.model.TokenModel;
 
@@ -33,6 +34,7 @@ import java.util.List;
 public class Common {
 
     public static ShipperUserModel currentShipperUser;
+    public static RestaurantModel currentRestaurant;
 
     public static void setSpanString(String welcome, String name, TextView tv_user) {
         SpannableStringBuilder builder = new SpannableStringBuilder();

@@ -14,4 +14,6 @@ public class CommonAgr {
     public static final String SHIPPING_ORDER_DATA = "ShippingData";
     public static final String URL_MAP_GOOGLE = "https://maps.googleapis.com/";
     public static final String TRIP_START = "Trip";
+    public static final String RESTAURANT_REF = "Restaurant" ;
+    public static final String RESTAURANT_SAVE = "RESTAURANT_SAVE";
 }
