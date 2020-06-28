@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import io.paperdb.Paper;
@@ -70,6 +71,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView tv_user = (TextView) headerView.findViewById(R.id.tv_user);
+        Common.setSpanString("Hey, ", Common.currentShipperUser.getName(), tv_user);
     }
 
     private void checkStartTrip() {

@@ -13,7 +13,7 @@
             android:id="@+id/img_restaurant"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/logo_shipper"
             android:scaleType="centerCrop"/>
 
         <LinearLayout
