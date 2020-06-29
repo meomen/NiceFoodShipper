@@ -31,11 +31,14 @@ import com.vuducminh.nicefoodshipper.model.TokenModel;
 import java.util.ArrayList;
 import java.util.List;
 
+//Lưu trữ các biến, hàm có phạm vi dùng trên toàn ứng dụng
 public class Common {
 
+    //Các biến có phạm vi dùng trên toàn ứng dụng
     public static ShipperUserModel currentShipperUser;
     public static RestaurantModel currentRestaurant;
 
+    // chỉnh font SpanString
     public static void setSpanString(String welcome, String name, TextView tv_user) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(welcome);
@@ -46,6 +49,7 @@ public class Common {
         tv_user.setText(builder, TextView.BufferType.SPANNABLE);
     }
 
+    // chỉnh font SpanString có màu
     public static void setSpanStringColor(String welcome, String name, TextView textView, int color) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(welcome);
@@ -57,6 +61,7 @@ public class Common {
         textView.setText(builder, TextView.BufferType.SPANNABLE);
     }
 
+    // <key-value> Trạng thái order
     public static String convertStatusToString(int orderStatus) {
         switch (orderStatus) {
             case 0: {
@@ -76,14 +81,16 @@ public class Common {
         }
     }
 
+    // Tạo giao diện thông báo
+    // Nội dung thông báo nhận từ Server
     public static void showNotification(Context context, int id, String title, String content, Intent intent) {
         PendingIntent pendingIntent = null;
         if (intent != null) {
             pendingIntent = PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         String NOTIFICATION_CHANNEL_ID = "minh_vu_nice_food_java";
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);  //Tạo giao diện
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                         // Nếu API Android >= 26
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
                     "Nice Food Java", NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription("Nice Food Java");
@@ -92,10 +99,11 @@ public class Common {
             notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             notificationChannel.enableVibration(true);
 
-            notificationManager.createNotificationChannel(notificationChannel);
+            notificationManager.createNotificationChannel(notificationChannel);        //Tạo thông báo
 
         }
 
+        // tạo giao diện thông báo
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         builder.setContentTitle(title)
                 .setContentText(content)
@@ -104,12 +112,12 @@ public class Common {
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_restaurant_menu_black_24dp));
 
         if (pendingIntent != null) {
-            builder.setContentIntent(pendingIntent);
+            builder.setContentIntent(pendingIntent);            //Nạp nội dụng thông báo
         }
         Notification notification = builder.build();
-        notificationManager.notify(id, notification);
+        notificationManager.notify(id, notification);           //hiện thông báo
     }
-
+    // Cập nhận Token
     public static void updateToken(Context context, String newToken, boolean isServer, boolean isShipper) {
         if(Common.currentShipperUser != null) {
             FirebaseDatabase.getInstance()
@@ -122,14 +130,20 @@ public class Common {
         }
     }
 
-    public static String createTopicOrder() {
-        return new StringBuilder("/topics/new_order").toString();
-    }
-
+    // Tính góc xoay cho icon Shipper khi đang di chuyển
+    // Chức năng Tracking Order( Theo dõi đơn hàng) sử dụng hàm này
     public static float getBearing(LatLng begin, LatLng end) {
-        double lat = Math.abs(begin.latitude - end.latitude);
-        double lng = Math.abs(begin.longitude - end.longitude);
+        double lat = Math.abs(begin.latitude - end.latitude);       //Vĩ Độ
+        double lng = Math.abs(begin.longitude - end.longitude);     // Kinh Độ
 
+          /*Từ điểm xuât phát, điểm đến có 4 trường hợp:
+           1: Vĩ độ cao hơn, Kinh độ cao hơn (Góc Trên-Phải)
+           2: Vĩ độ thấp hơn, Kình độ cao hơn (Góc Dưới-Phải)
+           3: Vĩ độ thấp hơn, Kình độ thấp hơn (Góc Dưới-Trái)
+           4: Vĩ độ cao hơn, Kình độ thấp hơn (Góc Trên-Trái)
+
+           Tương ứng với mỗi trường hợp sẽ là 4 cách tính
+         */
 
         if(begin.latitude < end.latitude && begin.longitude < end.longitude) {
             return (float)(Math.toDegrees(Math.atan(lng/lat)));
@@ -147,6 +161,9 @@ public class Common {
 
     }
 
+    // Tính và tìm đoạn đường từ shipper đến điểm giao hàng
+    // Tham khảo từ: https://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
+    // Chức năng Tracking Order( Theo dõi đơn hàng) sử dụng hàm này
     public static List<LatLng> decodePoly(String encode) {
         List poly = new ArrayList();
         int index = 0,len = encode.length();
@@ -177,6 +194,7 @@ public class Common {
         return poly;
     }
 
+    // Chuyển vị trí hiện tại sang dạng String. VD: "41.40338, 2.17403"
     public static String buildLocationString(Location location) {
         return new StringBuilder().append(location.getLatitude()).append(",")
                 .append(location.getLongitude()).toString();

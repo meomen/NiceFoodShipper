@@ -1,5 +1,7 @@
 package com.vuducminh.nicefoodshipper.model;
 
+
+//Shipper
 public class ShipperUserModel {
 
     private String uid,name,phone;

@@ -1,5 +1,6 @@
 package com.vuducminh.nicefoodshipper.model;
 
+// Nhà hàng
 public class RestaurantModel {
     private String uid,name,address,paymentUrl,imageUrl,phone;
 

@@ -2,6 +2,8 @@ package com.vuducminh.nicefoodshipper.model;
 
 import androidx.annotation.NonNull;
 
+
+// Món ăn
 public class CartItem {
     private String foodId;
     private String foodName;

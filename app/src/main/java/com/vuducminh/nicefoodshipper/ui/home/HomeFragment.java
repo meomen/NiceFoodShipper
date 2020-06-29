@@ -28,14 +28,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
+// HomeFragmet hiện thị trang chủ
 public class HomeFragment extends Fragment {
 
     @BindView(R.id.recycler_order)
     RecyclerView recycler_order;
 
     private Unbinder unbinder;
-    private LayoutAnimationController  layoutAnimationController;
+    private LayoutAnimationController  layoutAnimationController;      // Quản chuyển động của các item Order
     private MyShippingOrderAdapter adapter;
 
     private HomeViewModel homeViewModel;
@@ -44,11 +44,15 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        // Liên kết với giao diện (layout)
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         initViews(root);
         homeViewModel.getMessageError().observe(this, s -> {
             Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show();
         });
+
+        // lấy dữ liệu thành công từ homeViewModel, nạp dữ liệu đó vào list order
         homeViewModel.getMutableLiveDataShippingOrder(Common.currentShipperUser.getPhone()).observe(this, shippingOrderModelList -> {
             adapter = new MyShippingOrderAdapter(getContext(),shippingOrderModelList);
             recycler_order.setAdapter(adapter);
@@ -65,6 +69,6 @@ public class HomeFragment extends Fragment {
         recycler_order.setLayoutManager(layoutManager);
         recycler_order.addItemDecoration(new DividerItemDecoration(getContext(),layoutManager.getOrientation()));
 
-        layoutAnimationController = AnimationUtils.loadLayoutAnimation(getContext(),R.anim.layout_slide_from_left);
+        layoutAnimationController = AnimationUtils.loadLayoutAnimation(getContext(),R.anim.layout_slide_from_left);        // Cài đặt chuyện động
     }
 }

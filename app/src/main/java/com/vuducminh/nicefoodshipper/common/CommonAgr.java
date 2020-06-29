@@ -1,5 +1,7 @@
 package com.vuducminh.nicefoodshipper.common;
 
+// Chuyên chứa các biến cố định xuyên suốt ứng dụng
+
 public class CommonAgr {
     public static final String SHIPPER_REF = "Shippers";
     public static final String CATEGORY_REF = "Category";

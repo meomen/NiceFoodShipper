@@ -45,12 +45,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.paperdb.Paper;
 
+
+// Màn hình hiện thị danh sách Activity
 public class RestaurantListActivity extends AppCompatActivity implements IRestaurantCallbackListener {
 
     @BindView(R.id.recycler_restaurant)
     RecyclerView recycler_restaurant;
     AlertDialog dialog;
-    LayoutAnimationController layoutAnimationController;
+    LayoutAnimationController layoutAnimationController;         // Quản lý chuyển động item
     MyRestaurantAdapter adapter;
 
     DatabaseReference serverRef;
@@ -61,9 +63,10 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
         setContentView(R.layout.activity_restaurant_list);
 
         initViews();
-        loadAllRestaurant();
+        loadAllRestaurant();  // tải dữ liệu các nhà hàng
     }
 
+    // tải dữ liệu các nhà hàng
     private void loadAllRestaurant() {
         dialog.show();
         List<RestaurantModel> restaurantModels = new ArrayList<>();
@@ -109,12 +112,13 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
         recycler_restaurant.addItemDecoration(new DividerItemDecoration(this,layoutManager.getOrientation()));
     }
 
+    // nếu tải dữ liệu thành công, nếu được sẽ cho vào list view
     @Override
     public void onRestaurantLoadSuccess(List<RestaurantModel> restaurantModelList) {
         dialog.dismiss();
         adapter = new MyRestaurantAdapter(this, restaurantModelList);
         recycler_restaurant.setAdapter(adapter);
-        recycler_restaurant.setLayoutAnimation(layoutAnimationController);
+        recycler_restaurant.setLayoutAnimation(layoutAnimationController);       // cài đặt chuyển động
     }
 
     @Override
@@ -134,6 +138,7 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
         super.onStop();
     }
 
+    // Nếu Restaurant item được chọn
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onRestaurantSelectedEvent(RestaurantSelectEvent event) {
         if(event != null) {
@@ -147,6 +152,7 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
         }
     }
 
+    // Kiểm tra tài khoảng shipper có trong firebase ko?
     private void checkServerUserFromFirebase(FirebaseUser user, RestaurantModel restaurantModel) {
         dialog.show();
 
@@ -179,6 +185,7 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
                 });
     }
 
+    // chuyển đến màn hình HomeActivity
     private void gotoHomeActivity(ShipperUserModel userModel, RestaurantModel restaurantModel) {
         dialog.dismiss();
 
@@ -191,6 +198,7 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
         finish();
     }
 
+    // Hiện thị dialog thông tin đăng ký tài khoản
     private void showRegisterDialog(FirebaseUser user, String uid) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Register");
@@ -239,6 +247,8 @@ public class RestaurantListActivity extends AppCompatActivity implements IRestau
                     })
                     .addOnCompleteListener(task -> {
                         dialog.dismiss();
+
+                        // Chờ Quản trị viên cho phép hoạt động
                         Toast.makeText(RestaurantListActivity.this,"Congratulation ! Register success ! Admin will check and active you soon",Toast.LENGTH_SHORT).show();
                     });
         });

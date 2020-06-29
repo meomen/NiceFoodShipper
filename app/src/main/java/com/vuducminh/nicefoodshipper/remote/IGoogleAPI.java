@@ -4,6 +4,8 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+
+// Khai báo Request Google API
 public interface IGoogleAPI {
     @GET("maps/api/directions/json")
     Observable<String> getDirections(

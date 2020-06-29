@@ -21,10 +21,11 @@ import com.vuducminh.nicefoodshipper.model.ShippingOrderModel;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class dùng để nạp dữ liệu vào HomeFrament
 public class HomeViewModel extends ViewModel implements IShippingOrderCallbackListener {
 
-    private MutableLiveData<List<ShippingOrderModel>>  mutableLiveDataShippingOrder;
-    private MutableLiveData<String> messageError;
+    private MutableLiveData<List<ShippingOrderModel>>  mutableLiveDataShippingOrder;              // Dữ liệu các order
+    private MutableLiveData<String> messageError;                                                   // Thông báo lỗi
 
     private IShippingOrderCallbackListener listener;
 
@@ -45,12 +46,13 @@ public class HomeViewModel extends ViewModel implements IShippingOrderCallbackLi
         return messageError;
     }
 
+    // lấy dữ liệu Order mà Shipper cần giao
     private void loadOrderByShipper(String shipperPhone) {
         List<ShippingOrderModel> tempList = new ArrayList<>();
         Query orderRef = FirebaseDatabase.getInstance().getReference(CommonAgr.RESTAURANT_REF)
                 .child(Common.currentRestaurant.getUid())
                 .child(CommonAgr.SHIPPING_ORDER_REF)
-                .orderByChild("shipperPhone")
+                .orderByChild("shipperPhone")                    // tìm theo order bằng số diện thoại shipper order đó chứa
                 .equalTo(Common.currentShipperUser.getPhone());
         orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -71,11 +73,13 @@ public class HomeViewModel extends ViewModel implements IShippingOrderCallbackLi
         });
     }
 
+    // Lấy dữ liệu thành công
     @Override
     public void onShippingOrderLoadSuccess(List<ShippingOrderModel> shippingOrderModelList) {
         mutableLiveDataShippingOrder.setValue(shippingOrderModelList);
     }
 
+    // Lấy dữ liệu thất bại
     @Override
     public void onShippingOrderLoadfailed(String message) {
         messageError.setValue(message);

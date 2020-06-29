@@ -2,6 +2,7 @@ package com.vuducminh.nicefoodshipper.model;
 
 import java.util.List;
 
+//Hóa đơn
 public class OrderModel {
 
     private String key;

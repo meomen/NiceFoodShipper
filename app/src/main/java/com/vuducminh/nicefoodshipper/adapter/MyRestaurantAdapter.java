@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//Apdate tạo item Restaurant
+// RestaurantList ở SizeAddonEditActivity sử dụng
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,15 +27,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+//  Apdate tạo item Restaurant
+//  RestaurantList ở RestaurantActivity sử dụng adapter này
 public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapter.MyViewHolder> {
-    Context context;
-    List<RestaurantModel> restaurantModels;
+    Context context;                                                                        // RestaurantActivity
+    List<RestaurantModel> restaurantModels;                                                 // DS dữ liệu Nhà hàng
 
     public MyRestaurantAdapter(Context context, List<RestaurantModel> restaurantModels) {
         this.context = context;
         this.restaurantModels = restaurantModels;
     }
 
+    // Liên kết với giao diện(Layout)
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,6 +46,7 @@ public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapte
         return new MyViewHolder(view);
     }
 
+    // Đổ dữ liệu vào
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Glide.with(context)
@@ -50,6 +56,7 @@ public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapte
         holder.tv_restaurant_address.setText(new StringBuilder(restaurantModels.get(position).getAddress()));
 
 
+        //Bắt sự kiện khi ấn item restaurant
         holder.setListener((view, pos) -> {
             Common.currentRestaurant = restaurantModels.get(pos);
             EventBus.getDefault().postSticky(new RestaurantSelectEvent(restaurantModels.get(pos)));
@@ -62,6 +69,8 @@ public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapte
         return restaurantModels.size();
     }
 
+
+    // Tạo viewHolder để adapter dễ quản lý nhiều item
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_restaurant_name)

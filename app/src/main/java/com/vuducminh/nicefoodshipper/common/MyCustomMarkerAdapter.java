@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.vuducminh.nicefoodshipper.R;
 
+// Adapter này hiện thị thông tin shipper trên bản đồ
 public class MyCustomMarkerAdapter implements GoogleMap.InfoWindowAdapter {
 
     private View itemView;

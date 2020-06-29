@@ -14,6 +14,7 @@ import android.view.animation.Interpolator;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+// Tạo hoạt hình di chuyển của shipper khi shipper di chuyển
 public class MarkerAnimation {
     public static void animateMarkerToGB(final Marker marker,
                                          LatLng finalPosition,
@@ -22,8 +23,8 @@ public class MarkerAnimation {
         LatLng startPosition = marker.getPosition();
         Handler handler = new Handler();
         long start = SystemClock.uptimeMillis();
-        Interpolator interpolator = new AccelerateDecelerateInterpolator();
-        float durationInMs = 3000;
+        Interpolator interpolator = new AccelerateDecelerateInterpolator();    // Khi shipper đến góc cua, xoay hình chậm
+        float durationInMs = 3000;        // 3s
 
         handler.post(new Runnable() {
             long elapsed;
@@ -32,19 +33,20 @@ public class MarkerAnimation {
             public void run() {
                 elapsed = SystemClock.uptimeMillis() - start;
                 t = elapsed / durationInMs;
-                v=  interpolator.getInterpolation(t);
+                v=  interpolator.getInterpolation(t);           //xoay hình
 
-                marker.setPosition(latLngInterpolator.interpolate(v,startPosition,finalPosition));
+                marker.setPosition(latLngInterpolator.interpolate(v,startPosition,finalPosition));       //hiện thị Shipper
 
-                //Repeat till progress is complete
+                //Lặp lại cho đến khi tiến trình hoàn tất
                 if(t<1) {
-                    // Post again 16ms laters
+                    // hiện thị lại sau 16 giây
                     handler.postDelayed(this,16);
                 }
             }
         });
     }
 
+    // Đối với Android 3.0
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void animateMarkerToHC(final Marker marker,
                                          LatLng finalPosition,
@@ -62,6 +64,7 @@ public class MarkerAnimation {
         valueAnimator.start();
     }
 
+    //Đối với Android 4.0
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static void animateMarkerToICS(final Marker marker,
                                          LatLng finalPosition,

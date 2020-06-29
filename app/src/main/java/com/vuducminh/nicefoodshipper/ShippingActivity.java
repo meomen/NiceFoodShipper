@@ -96,6 +96,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.http.Url;
 
+
+// Màn hình hiện thị bản đồ, vị trị của shipper, khách hàng và dẫn đường cho shipper
 public class ShippingActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -129,6 +131,8 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
     private Polyline redPolyline;
     private Polyline yellowPolyline;
 
+
+    // Nút bắt đầu giao hàng
     @OnClick(R.id.btn_start_trip)
     void onStartTripClick() {
         String data = Paper.book().read(CommonAgr.SHIPPING_ORDER_DATA);
@@ -140,6 +144,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
 
 
         //Update
+        // Nạp dữ liệu từ Json
         fusedLocationProviderClient.getLastLocation()
                 .addOnSuccessListener(location -> {
                     compositeDisposable.add(iGoogleAPI.getDirections("driving",
@@ -190,6 +195,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
                 });
     }
 
+    // bắt sự kiện nút show thông tin được bấm
     @OnClick(R.id.btn_show)
     void onShowClick() {
         if (expandable_layout.isExpanded()) {
@@ -200,6 +206,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         expandable_layout.toggle();
     }
 
+    // bắt sự kiện nút gọi được bấm
     @OnClick(R.id.btn_call)
     void onCallClick() {
         if (shippingOrderModel != null) {
@@ -230,7 +237,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
-    private AutocompleteSupportFragment places_fragment;
+    private AutocompleteSupportFragment places_fragment;    // Thanh tìm kiếm vị trí
     private PlacesClient placesClient;
     private List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
             Place.Field.NAME,
@@ -242,11 +249,11 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
     //Animation
     private Handler handler;
     private int index, next;
-    private LatLng start, end;
+    private LatLng start, end;            // vị trí bắt đầu, kết thức
     private float v;
     private double lat, lng;
     private Polyline blackPolyline, greyPolyline;
-    private PolylineOptions polylineOptions, blackPolylineOptions;
+    private PolylineOptions polylineOptions, blackPolylineOptions;              // bộ cài đặt dẫn đường màu đỏ, màu đen
     private List<LatLng> polylineList;
     private IGoogleAPI iGoogleAPI;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -256,6 +263,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping);
 
+        // Khai báo Api google
         iGoogleAPI = RetrofitClient.getInstance().create(IGoogleAPI.class);
 
         initPlaces();
@@ -266,6 +274,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         buildLocationCallback();
 
 
+        // Cấp quyền cho biết vị trí shipper
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new PermissionListener() {
@@ -294,12 +303,13 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
 
     }
 
-
+    // Khai báo Thanh tìm kiếm vị trí
     private void initPlaces() {
-        Places.initialize(this, getString(R.string.google_maps_key));
+        Places.initialize(this, getString(R.string.google_maps_key)); // key API
         placesClient = Places.createClient(this);
     }
 
+    // tự động hoàn thành text trên thanh công vụ tìm kiếm vụ trí
     private void setupAutocompletePlaces() {
         places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.places_autocomplete_fragment);
@@ -317,6 +327,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         });
     }
 
+    // Dẫn đường đến vị trí tùy chọn   (được chọn trên thanh tím kiếm vị trí)
     private void drawRoutes(Place place) {
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
@@ -385,6 +396,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
                 });
     }
 
+    // dấn đường đến vị trí khách hàng
     private void drawRoutes(String data) {
         ShippingOrderModel shippingOrderModel = new Gson()
                 .fromJson(data, new TypeToken<ShippingOrderModel>() {
@@ -459,6 +471,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
                 });
     }
 
+    // Hiện thị thông tin ShippingOrder
     private void setShippingOrder() {
         Paper.init(this);
         String data;
@@ -503,7 +516,6 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
             }
         }
     }
-
 
     private void buildLocationRequest() {
         locationRequest = new LocationRequest();
@@ -567,10 +579,9 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
 
     }
 
+    // Cập nhận vị trí hiện tại
     private void updateLocation(Location lastLocation) {
-//        Map<String, Object> update_data = new HashMap<>();
-//        update_data.put("currentLat", lastLocation.getLatitude());
-//        update_data.put("currentLng", lastLocation.getLongitude());
+
 
         String data = Paper.book().read(CommonAgr.TRIP_START);
         if (!TextUtils.isEmpty(data)) {
@@ -622,6 +633,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
+    // Hoạt hình khi Shipper di chuyển
     private void moveMarketAnimation(Marker marker, String from, String to) {
 
         compositeDisposable.add(iGoogleAPI.getDirections("driving",
@@ -741,10 +753,7 @@ public class ShippingActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         setShippingOrder();
-
-
     }
 
     @Override

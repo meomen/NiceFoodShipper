@@ -1,5 +1,7 @@
 package com.vuducminh.nicefoodshipper.model;
 
+
+// ĐƠn hàng đang giao
 public class ShippingOrderModel {
     private String key,shipperPhone,shipperName;
     private double currentLat,currentLng;

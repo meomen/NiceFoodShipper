@@ -52,17 +52,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        updateToken();
+        updateToken();      // Cập nhận token để nhận thông báo từ server
 
-        checkStartTrip();
+        checkStartTrip();     // kiểm tra xem shipper đang thực hiện đơn ship nào không
 
+        // cài đặt menu slide left , toolbar và menu option.
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_home)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -77,13 +77,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Common.setSpanString("Hey, ", Common.currentShipperUser.getName(), tv_user);
     }
 
+    // kiểm tra xem shipper đang thực hiện đơn ship nào không
     private void checkStartTrip() {
         Paper.init(this);
-        if(TextUtils.isEmpty(Paper.book().read(CommonAgr.TRIP_START))) {
-           startActivity(new Intent(this,ShippingActivity.class));
+        if(TextUtils.isEmpty(Paper.book().read(CommonAgr.TRIP_START))) {       // nếu đang thực hiện
+           startActivity(new Intent(this,ShippingActivity.class));     // mở màn hình bản đồ luôn
         }
     }
 
+    // Cập nhận token để nhận thông báo từ server
     private void updateToken() {
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
@@ -109,13 +111,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 || super.onSupportNavigateUp();
     }
 
+
+    // Cài đặt button trên menu slide left
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setCheckable(true);
         drawer.closeDrawers();
         switch (menuItem.getItemId()) {
             case R.id.nav_sign_out: {
-                signOut();
+                signOut();        // nút đăng xuất
                 break;
             }
         }
@@ -123,6 +127,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //Đăng xuất
     private void signOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Signout")
@@ -137,11 +142,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        // Xóa dữ liệu
                         Common.currentRestaurant = null;
                         Common.currentShipperUser = null;
                         Paper.init(HomeActivity.this);
                         Paper.book().delete(CommonAgr.RESTAURANT_SAVE);
-                        FirebaseAuth.getInstance().signOut();
+                        FirebaseAuth.getInstance().signOut();     //đăng xuất khỏi firebase
 
                         Intent intent = new Intent(HomeActivity.this,MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

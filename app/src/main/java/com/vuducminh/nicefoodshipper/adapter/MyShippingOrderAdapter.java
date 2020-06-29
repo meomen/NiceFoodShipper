@@ -30,26 +30,31 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.paperdb.Paper;
 
+
+//  Apdate tạo item Order cần giao
+//  ShippingOrderList ở HomeFragment sử dụng adapter này
 public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrderAdapter.MyViewHolder>{
 
-    private Context context;
-    private List<ShippingOrderModel> shippingOrderModelList;
-    private SimpleDateFormat simpleDateFormat;
+    private Context context;                                                // Home Activity
+    private List<ShippingOrderModel> shippingOrderModelList;                // DS dữ liệu ShippingOrder
+    private SimpleDateFormat simpleDateFormat;                              // định đạng thời gian
 
     public MyShippingOrderAdapter(Context context, List<ShippingOrderModel> shippingOrderModelList) {
         this.context = context;
         this.shippingOrderModelList = shippingOrderModelList;
-        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");       // dạng thời gian
         Paper.init(context);
     }
 
+    // Liên kết với giao diện(Layout)
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_order_shipper,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_order_shipper_item,parent,false);
         return new MyViewHolder(view);
     }
 
+    // Đổ dữ liệu vào
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
@@ -66,15 +71,15 @@ public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrder
         Common.setSpanStringColor("Address:",orderModel.getShippingAddress(),holder.tv_order_address, Color.parseColor("#BA454A"));
 
         Common.setSpanStringColor("Payment:",orderModel.getTransactionId(),holder.tv_payment, Color.parseColor("#BA454A"));
-        //Disable button if already start up
+
+        // nếu đơn hàng đang được ship
         if(shippingOrderModelList.get(position).isStartTrip()) {
             holder.btn_ship_now.setEnabled(false);
         }
 
         holder.btn_ship_now.setOnClickListener(v -> {
-
-            Paper.book().write(CommonAgr.SHIPPING_ORDER_DATA,new Gson().toJson(shippingOrderModelList.get(position)));
-            context.startActivity(new Intent(context, ShippingActivity.class));
+            Paper.book().write(CommonAgr.SHIPPING_ORDER_DATA,new Gson().toJson(shippingOrderModelList.get(position)));              // Lưu dữ liệu Shipping order
+            context.startActivity(new Intent(context, ShippingActivity.class));                 // Mở màn hình bản đồ
         });
 
     }
@@ -84,6 +89,7 @@ public class MyShippingOrderAdapter extends RecyclerView.Adapter<MyShippingOrder
         return shippingOrderModelList.size();
     }
 
+    // Tạo viewHolder để adapter dễ quản lý nhiều item
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private Unbinder unbinder;
 

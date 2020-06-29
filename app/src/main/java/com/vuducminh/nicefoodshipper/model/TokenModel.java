@@ -1,5 +1,7 @@
 package com.vuducminh.nicefoodshipper.model;
 
+
+//Token, giúp xác nhận thi nhận, gửi thông báo từ các app server
 public class TokenModel {
     private String phone,token;
     private boolean serverToken,shipperToken;
