@@ -2,7 +2,7 @@ package com.vuducminh.nicefoodshipper.common;
 
 import com.google.android.gms.maps.model.LatLng;
 
-// Tím toán giúp vẽ hoạt hình di chuyển Shipper
+// Tím toán giúp vẽ hoạt hình xoay Shipper 
 //Tham khảo: https://stackoverflow.com/questions/23203611/how-to-animate-a-marker-through-an-arraylist-of-latlng-points
 public interface LatLngInterpolator {
 
